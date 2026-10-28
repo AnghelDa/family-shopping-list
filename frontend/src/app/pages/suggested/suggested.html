@@ -1,0 +1,46 @@
+<h2>Sugestii</h2>
+@if (items.errorMessage()) {
+  <p class="error">{{ items.errorMessage() }}</p>
+}
+<div class="add-row">
+  <input #box placeholder="nume articol" />
+  <button (click)="items.addSuggestion(box.value)">Adauga sugestie</button>
+</div>
+
+<button
+  class="mic"
+  [class.listening]="listening()"
+  [attr.aria-label]="listening() ? 'Ascult...' : 'Vorbeste'"
+  (click)="listen()"
+>
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"
+    ></path>
+  </svg>
+</button>
+<p class="heard" aria-live="polite">
+  @if (heard()) {
+    Am inteles:{{ heard() }}
+  }
+</p>
+
+<h3>Toate articolele</h3>
+<ul class="sheet">
+  @for (item of items.catalog(); track item._id) {
+    <li>
+      {{ item.name }}
+      <button (click)="items.toggleOnList(item._id)">
+        {{ item.onList ? 'scoate de pe lista' : 'pune pe lista' }}
+      </button>
+
+      @if (confirmingId() === item._id) {
+        Esti sigura?
+        <button (click)="confirmDelete(item._id)">Da</button>
+        <button (click)="cancelDelete()">Nu</button>
+      } @else {
+        <button (click)="askDelete(item._id)" class="danger">sterge</button>
+      }
+    </li>
+  }
+</ul>

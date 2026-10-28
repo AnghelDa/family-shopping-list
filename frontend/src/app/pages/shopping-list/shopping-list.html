@@ -1,0 +1,12 @@
+@if (items.errorMessage()) {
+  <p class="error">{{ items.errorMessage() }}</p>
+}
+<h2>Lista de cumparaturi ({{ items.shoppingList().length }})</h2>
+<ul class="sheet">
+  @for (item of items.shoppingList(); track item._id) {
+    <li>
+      <span [style.text-decoration]="item.checked ? 'line-through' : 'none'"> {{ item.name }}</span>
+      <button (click)="items.toggleChecked(item._id)">bifeaza</button>
+    </li>
+  }
+</ul>

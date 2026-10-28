@@ -1,0 +1,110 @@
+:root {
+  --paper: #fafcff;
+  --grid: #d5e1f0;
+  --ink: #1b2433;
+  --ink-soft: #5b6678;
+  --pen: #2347c8;
+  --teacher-red: #c23b3b;
+  --cell: 20px;
+  --row: calc(var(--cell) * 3);
+  --font-body: 'Source Sans 3', system-ui, sans-serif;
+  --font-hand: 'Caveat', cursive;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 1.4;
+  color: var(--ink);
+  background-color: var(--paper);
+}
+
+h2,
+h3 {
+  margin: 1.25rem 0 0.5rem;
+  font-family: var(--font-hand);
+  line-height: 1.1;
+}
+h2 {
+  font-size: 2rem;
+}
+h3 {
+  font-size: 1.6rem;
+}
+
+.sheet {
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: var(--cell) var(--cell);
+  border: 2px solid var(--grid);
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  min-height: var(--row);
+  padding: 0 var(--cell);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+button {
+  min-height: 44px;
+  padding: 0 1rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--pen);
+  background: transparent;
+  border: 2px solid var(--pen);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button.danger {
+  color: var(--teacher-red);
+  border-color: var(--teacher-red);
+}
+
+input {
+  min-height: 44px;
+  padding: 0 0.5rem;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--pen);
+  outline-offset: 2px;
+}
+
+.add-row input {
+  flex: 1;
+}
+
+.error {
+  margin: 0;
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--teacher-red);
+  color: var(--teacher-red);
+  font-weight: 600;
+}
