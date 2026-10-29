@@ -1,11 +1,23 @@
 :root {
-  --paper: #fafcff;
-  --grid: #d5e1f0;
-  --ink: #1b2433;
-  --ink-soft: #5b6678;
-  --pen: #2347c8;
-  --teacher-red: #c23b3b;
-  --cell: 20px;
+  --paper: #f8f7f2;
+  --surface: #fffefa;
+  --ink: #26312a;
+  --ink-soft: #5c675f;
+  --sage: #4f6b56;
+  --sage-soft: #e8eee8;
+  --border: #d9dfd7;
+  --control-border: #aab6ab;
+  --teacher-red: #a33b35;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --shadow-sm: 01px 3px rgb(38 49 42 / 0.08);
+  --pen: var(--sage);
+  --cell: var(--space-5);
   --row: calc(var(--cell) * 3);
   --font-body: 'Source Sans 3', system-ui, sans-serif;
   --font-hand: 'Caveat', cursive;
@@ -29,24 +41,24 @@ body {
 
 h2,
 h3 {
-  margin: 1.25rem 0 0.5rem;
+  margin: var(--space-5) 0 var(--space-2);
   font-family: var(--font-hand);
   line-height: 1.1;
 }
+
 h2 {
   font-size: 2rem;
 }
+
 h3 {
   font-size: 1.6rem;
 }
 
 .sheet {
-  background-color: var(--paper);
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: var(--cell) var(--cell);
-  border: 2px solid var(--grid);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
 ul {
@@ -61,39 +73,40 @@ li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: var(--space-3);
 }
 
 button {
   min-height: 44px;
-  padding: 0 1rem;
+  padding: 0 var(--space-4);
   font: inherit;
   font-weight: 600;
-  color: var(--pen);
-  background: transparent;
-  border: 2px solid var(--pen);
-  border-radius: 4px;
+  color: var(--sage);
+  background: var(--sage-soft);
+  border: 1px solid var(--sage);
+  border-radius: var(--radius-sm);
   cursor: pointer;
 }
 
 button.danger {
   color: var(--teacher-red);
   border-color: var(--teacher-red);
+  background: transparent;
 }
 
 input {
   min-height: 44px;
-  padding: 0 0.5rem;
+  padding: 0 var(--space-2);
   font: inherit;
   font-size: 1rem;
   color: var(--ink);
-  background: var(--paper);
-  border: 2px solid var(--ink);
-  border-radius: 4px;
+  background: var(--surface);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-sm);
 }
 
 :focus-visible {
-  outline: 3px solid var(--pen);
+  outline: 3px solid var(--sage);
   outline-offset: 2px;
 }
 
