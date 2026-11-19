@@ -1,4 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
+import { catchError, EMPTY, finalize, Observable, tap } from 'rxjs';
 import { Item } from '../models/item';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
@@ -17,7 +18,11 @@ export class ItemsService {
   private _items = signal<Item[]>([]);
   readonly catalog = this._items.asReadonly();
   readonly shoppingList = computed(() => this._items().filter((i) => i.onList));
+  readonly initialLoading = signal(true);
+  readonly loading = signal(false);
   readonly errorMessage = signal<string | null>(null);
+  private pendingRefreshes = 0;
+
   private handleError(err: HttpErrorResponse) {
     if (err.status === 0) {
       this.errorMessage.set('Nu ma pot conecta la server.Verifica conexiunea.');
@@ -31,22 +36,44 @@ export class ItemsService {
   }
 
   constructor() {
-    this.loadItems();
+    this.loadItems(true);
   }
 
-  private loadItems() {
-    this.http.get<Item[]>(API_URL).subscribe({
-      next: (items) => this._items.set(items),
-      error: (err) => this.handleError(err),
-    });
+  private loadItems(isInitialLoad = false) {
+    if (isInitialLoad) {
+      this.initialLoading.set(true);
+    } else {
+      this.pendingRefreshes += 1;
+      this.loading.set(true);
+    }
+
+    this.http
+      .get<Item[]>(API_URL)
+      .pipe(
+        finalize(() => {
+          if (isInitialLoad) {
+            this.initialLoading.set(false);
+          } else {
+            this.pendingRefreshes -= 1;
+            this.loading.set(this.pendingRefreshes > 0);
+          }
+        }),
+      )
+      .subscribe({
+        next: (items) => this._items.set(items),
+        error: (err) => this.handleError(err),
+      });
   }
 
-  addSuggestion(name: string) {
+  addSuggestion(name: string): Observable<Item> {
     this.errorMessage.set(null);
-    this.http.post<Item>(API_URL, { name }).subscribe({
-      next: () => this.loadItems(),
-      error: (err) => this.handleError(err),
-    });
+    return this.http.post<Item>(API_URL, { name }).pipe(
+      tap(() => this.loadItems()),
+      catchError((err: HttpErrorResponse) => {
+        this.handleError(err);
+        return EMPTY;
+      }),
+    );
   }
 
   toggleOnList(id: string) {

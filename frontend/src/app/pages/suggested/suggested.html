@@ -2,45 +2,52 @@
 @if (items.errorMessage()) {
   <p class="error">{{ items.errorMessage() }}</p>
 }
-<div class="add-row">
-  <input #box placeholder="nume articol" />
-  <button (click)="items.addSuggestion(box.value)">Adauga sugestie</button>
+
+<form class="add-row" (ngSubmit)="addSuggestion()">
+  <input name="suggestionName" [(ngModel)]="suggestionName" placeholder="nume articol" />
+  <button type="submit">Adauga sugestie</button>
+</form>
+
+<div class="voice-row">
+  <button
+    class="mic"
+    [class.listening]="listening()"
+    [attr.aria-label]="listening() ? 'Ascult...' : 'Vorbeste'"
+    (click)="listen()"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"
+      ></path>
+    </svg>
+  </button>
+  <p class="heard" aria-live="polite">
+    @if (heard()) {
+      Am inteles: {{ heard() }}
+    }
+  </p>
 </div>
 
-<button
-  class="mic"
-  [class.listening]="listening()"
-  [attr.aria-label]="listening() ? 'Ascult...' : 'Vorbeste'"
-  (click)="listen()"
->
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"
-    ></path>
-  </svg>
-</button>
-<p class="heard" aria-live="polite">
-  @if (heard()) {
-    Am inteles:{{ heard() }}
-  }
-</p>
-
 <h3>Toate articolele</h3>
-<ul class="sheet">
+<ul class="sheet suggested-list">
   @for (item of items.catalog(); track item._id) {
     <li>
-      {{ item.name }}
-      <button (click)="items.toggleOnList(item._id)">
-        {{ item.onList ? 'scoate de pe lista' : 'pune pe lista' }}
-      </button>
+      <span class="item-name">{{ item.name }}</span>
+      <div class="item-actions">
+        <button class="list-toggle" (click)="items.toggleOnList(item._id)">
+          {{ item.onList ? 'scoate de pe lista' : 'pune pe lista' }}
+        </button>
 
-      @if (confirmingId() === item._id) {
-        Esti sigura?
-        <button (click)="confirmDelete(item._id)">Da</button>
-        <button (click)="cancelDelete()">Nu</button>
-      } @else {
-        <button (click)="askDelete(item._id)" class="danger">sterge</button>
-      }
+        @if (confirmingId() === item._id) {
+          <div class="delete-confirmation" role="group" aria-label="Confirmare stergere">
+            <span>Esti sigura?</span>
+            <button class="danger" (click)="confirmDelete(item._id)">Da</button>
+            <button (click)="cancelDelete()">Nu</button>
+          </div>
+        } @else {
+          <button class="danger delete-buton" (click)="askDelete(item._id)">sterge</button>
+        }
+      </div>
     </li>
   }
 </ul>

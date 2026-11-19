@@ -1,17 +1,27 @@
 import { Component, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ItemsService } from '../../services/items';
 
 @Component({
   selector: 'app-suggested',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './suggested.html',
   styleUrl: './suggested.scss',
 })
 export class Suggested {
   items = inject(ItemsService);
+  suggestionName = '';
   heard = signal('');
   listening = signal(false);
   confirmingId = signal<string | null>(null);
+
+  addSuggestion() {
+    this.items.addSuggestion(this.suggestionName).subscribe({
+      next: () => {
+        this.suggestionName = '';
+      },
+    });
+  }
 
   listen() {
     const SpeechRecognition =
@@ -30,7 +40,7 @@ export class Suggested {
     recognition.onresult = (event: any) => {
       const text = event.results[0][0].transcript.trim().replace(/[.,!?]+$/, '');
       this.heard.set(text);
-      this.items.addSuggestion(text);
+      this.items.addSuggestion(text).subscribe();
     };
     recognition.onerror = (event: any) => {
       if (event.error === 'not-allowed') {

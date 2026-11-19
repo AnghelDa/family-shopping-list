@@ -1,12 +1,29 @@
 @if (items.errorMessage()) {
-  <p class="error">{{ items.errorMessage() }}</p>
+  <p class="error" role="alert">{{ items.errorMessage() }}</p>
 }
-<h2>Lista de cumparaturi ({{ items.shoppingList().length }})</h2>
-<ul class="sheet">
-  @for (item of items.shoppingList(); track item._id) {
-    <li>
-      <span [style.text-decoration]="item.checked ? 'line-through' : 'none'"> {{ item.name }}</span>
-      <button (click)="items.toggleChecked(item._id)">bifeaza</button>
-    </li>
+
+@if (items.initialLoading()) {
+  <p>Se încarcă lista...</p>
+} @else {
+  <h2>Lista de cumparaturi ({{ items.shoppingList().length }})</h2>
+
+  @if (items.shoppingList().length > 0) {
+    <ul class="sheet shopping-list">
+      @for (item of items.shoppingList(); track item._id) {
+        <li [class.checked]="item.checked">
+          <span class="item-name"> {{ item.name }}</span>
+          <button
+            class="check-toggle"
+            type="button"
+            [attr.aria-pressed]="item.checked"
+            (click)="items.toggleChecked(item._id)"
+          >
+            {{ item.checked ? 'Debifeaza' : 'Bifeaza' }}
+          </button>
+        </li>
+      }
+    </ul>
+  } @else if (!items.errorMessage()) {
+    <p>Lista este goala. Adauga produse de pe lista de sugestii.</p>
   }
-</ul>
+}

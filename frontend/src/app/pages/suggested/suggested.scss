@@ -1,7 +1,27 @@
+.add-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+}
+.add-row input {
+  min-width: 0;
+}
+
+.add-row button {
+  white-space: nowrap;
+}
+
+.voice-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-block: var(--space-3);
+}
+
 .mic {
-  position: fixed;
-  right: 1rem;
-  bottom: 4.5rem;
+  position: static;
+  flex: 0 0 56px;
   width: 56px;
   height: 56px;
   padding: 0;
@@ -10,6 +30,10 @@
   border-radius: 50%;
   color: var(--paper);
   background: var(--pen);
+}
+
+.mic.listening {
+  animation: pulse 1.2s ease-out infinite;
 }
 
 .mic svg {
@@ -24,21 +48,103 @@
 
 @keyframes pulse {
   from {
-    box-shadow: 0 0 0 0 rgb(35 71 200 / 0.45);
+    box-shadow: 0 0 0 0 rgb(79 107 86 / 0.45);
   }
   to {
-    box-shadow: 0 0 0 18px rgb(35 71 200 / 0);
+    box-shadow: 0 0 0 18px rgb(79 107 86 / 0);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .mic.listening {
     animation: none;
-    box-shadow: 0 0 0 6px rgb(35 71 200 / 0.3);
+    box-shadow: 0 0 0 6px rgb(79 107 86 / 0.3);
   }
 }
 
+.suggested-list li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 20rem);
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+}
+
+.item-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.item-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.list-toggle,
+.delete-button {
+  white-space: nowrap;
+}
+
+.list-toggle {
+  width: 100%;
+  min-width: 0;
+}
+
+.delete-confirmation {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: var(--space-2);
+  background: var(--sage-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.delete-confirmation button {
+  white-space: nowrap;
+}
+
 .heard {
-  margin: 0.5rem 0;
+  min-width: 0;
+  margin: 0;
   color: var(--ink-soft);
+}
+
+@media (max-width: 40rem) {
+  .add-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .add-row button {
+    width: 100%;
+  }
+
+  .suggested-list li {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .item-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .item-actions > button {
+    width: 100%;
+  }
+
+  .delete-confirmation {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .delete-confirmation span {
+    grid-column: 1 / -1;
+  }
+
+  .delete-confirmation button {
+    width: 100%;
+  }
 }

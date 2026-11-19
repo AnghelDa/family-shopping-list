@@ -20,7 +20,6 @@
   --cell: var(--space-5);
   --row: calc(var(--cell) * 3);
   --font-body: 'Source Sans 3', system-ui, sans-serif;
-  --font-hand: 'Caveat', cursive;
 }
 
 *,
@@ -42,7 +41,7 @@ body {
 h2,
 h3 {
   margin: var(--space-5) 0 var(--space-2);
-  font-family: var(--font-hand);
+  font-family: var(--font-body);
   line-height: 1.1;
 }
 
